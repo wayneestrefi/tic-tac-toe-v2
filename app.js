@@ -113,6 +113,12 @@
     var open = available();
     if (!open.length) return;
     var pick = open[Math.floor(Math.random() * open.length)];
+    if (difficulty === 'easy') {
+      var weakSquares = [1, 3, 5, 7].filter(function (i) { return cells[i] === ''; });
+      if (weakSquares.length && Math.random() < 0.75) pick = weakSquares[Math.floor(Math.random() * weakSquares.length)];
+      play(pick, true);
+      return;
+    }
     if (difficulty === 'medium' || difficulty === 'hard') {
       for (var i = 0; i < open.length; i++) if (canWin(open[i], turn)) { pick = open[i]; break; }
       var enemy = turn === 'X' ? 'O' : 'X';
