@@ -47,7 +47,7 @@
     over = false;
     el('roundLabel').textContent = 'ROUND ' + ('0' + round).slice(-2);
     render();
-    if (mode === 'ai' && !players[turn].human) window.setTimeout(aiMove, 350);
+    if (mode === 'ai' && !players[turn].human) window.setTimeout(aiMove, 1000);
   }
 
   function render() {
@@ -75,7 +75,7 @@
     el('cardX').classList.toggle('active', turn === 'X' && !over);
     el('cardO').classList.toggle('active', turn === 'O' && !over);
     el('turnTitle').innerHTML = over ? 'ROUND COMPLETE' : players[turn].name + "'S TURN <span>· " + turn + '</span>';
-    el('statusText').textContent = over ? 'CHOOSE YOUR NEXT MOVE' : turn + ' STARTS THE ROUND';
+    el('statusText').textContent = over ? 'CHOOSE YOUR NEXT MOVE' : (mode === 'ai' && !players[turn].human ? 'AI IS THINKING...' : turn + ' STARTS THE ROUND');
     el('modeChip').textContent = mode === 'ai' ? 'PLAYER VS AI · ' + difficulty.toUpperCase() : 'PLAYER VS PLAYER';
   }
 
@@ -94,7 +94,7 @@
     cells[index] = turn;
     var result = winner();
     if (result) finish(result);
-    else { turn = turn === 'X' ? 'O' : 'X'; render(); if (mode === 'ai' && !players[turn].human) window.setTimeout(aiMove, 350); }
+    else { turn = turn === 'X' ? 'O' : 'X'; render(); if (mode === 'ai' && !players[turn].human) window.setTimeout(aiMove, 1000); }
   }
 
   function finish(result) {
