@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0c12" />
+    <title>Arcade Nine — Tic-Tac-Toe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><span>ARCADE <em>NINE</em></span></div>
+        <div class="top-meta"><span class="live-dot"></span><span>LOCAL PLAY</span><span class="slash">/</span><span id="roundLabel">ROUND 01</span></div>
+      </header>
+
+      <section class="setup-view" id="setupView">
+        <div class="eyebrow">THE CLASSIC, REFINED</div>
+        <h1>Make your <span>move.</span></h1>
+        <p class="intro">A considered game of Xs and Os. Pick your mode, name your players,<br />and settle in for a beautiful little battle.</p>
+        <div class="mode-tabs" role="tablist">
+          <button type="button" class="mode-tab active" data-mode="pvp"><span class="tab-icon">♧</span><span><b>PLAYER VS PLAYER</b><small>Pass the screen</small></span></button>
+          <button type="button" class="mode-tab" data-mode="ai"><span class="tab-icon">✦</span><span><b>PLAYER VS AI</b><small>Test your instincts</small></span></button>
+        </div>
+        <div class="setup-card">
+          <div class="form-grid">
+            <label><span>PLAYER ONE <small>PLAYS X</small></span><input id="nameOne" maxlength="16" placeholder="Enter a name" /></label>
+            <div class="versus">VS</div>
+            <label><span id="secondLabel">PLAYER TWO <small>PLAYS O</small></span><input id="nameTwo" maxlength="16" placeholder="Enter a name" /></label>
+          </div>
+          <div class="ai-options hidden" id="aiOptions">
+            <div class="option-block"><span class="option-title">YOUR SIDE</span><div class="segmented" id="sidePicker"><button type="button" class="selected" data-side="X">X</button><button type="button" data-side="O">O</button></div></div>
+            <div class="option-block difficulty"><span class="option-title">DIFFICULTY</span><div class="difficulty-pills" id="difficultyPicker"><button type="button" class="selected" data-difficulty="easy">EASY</button><button type="button" data-difficulty="medium">MEDIUM</button><button type="button" data-difficulty="hard">HARD</button></div></div>
+          </div>
+          <button type="button" class="primary-button" id="startButton">START MATCH <span>→</span></button>
+        </div>
+        <div class="setup-footer"><span>01</span><div></div><span>CHOOSE YOUR ARENA</span></div>
+      </section>
+
+      <section class="game-view hidden" id="gameView">
+        <div class="game-heading"><div><div class="eyebrow">MATCH IN PROGRESS</div><h2 id="turnTitle">WAYNE'S TURN <span>· X</span></h2></div><div class="mode-chip" id="modeChip">PLAYER VS PLAYER</div></div>
+        <div class="score-row">
+          <article class="player-card active" id="cardX"><div class="card-top"><span class="role-label">PLAYER X</span><span class="symbol x">×</span></div><h3 id="nameX">PLAYER ONE</h3><div class="wins"><strong id="scoreX">0</strong><span>WINS</span></div><div class="active-line"></div></article>
+          <div class="match-score"><span class="score-caption">SCOREBOARD</span><div><b id="draws">0</b><small>DRAWS</small></div></div>
+          <article class="player-card" id="cardO"><div class="card-top"><span class="role-label">PLAYER O</span><span class="symbol o">○</span></div><h3 id="nameO">PLAYER TWO</h3><div class="wins"><strong id="scoreO">0</strong><span>WINS</span></div><div class="active-line"></div></article>
+        </div>
+        <div class="board-wrap"><div class="board" id="board" aria-label="Tic tac toe board"></div></div>
+        <div class="game-footer"><div class="status-note"><span class="pulse"></span><span id="statusText">X STARTS THE ROUND</span></div><div class="actions"><button type="button" class="ghost-button" id="restartButton">↻ <span>RESTART ROUND</span></button><button type="button" class="ghost-button" id="swapButton">⇄ <span>SWAP X / O</span></button><button type="button" class="ghost-button" id="newButton">＋ <span>NEW MATCH</span></button></div></div>
+      </section>
+
+      <div class="result-overlay hidden" id="resultOverlay"><div class="result-card"><div class="result-kicker" id="resultKicker">ROUND COMPLETE</div><div class="result-symbol" id="resultSymbol">×</div><h2 id="resultTitle">WAYNE WINS</h2><p id="resultSub">Victory as X</p><div class="result-actions"><button type="button" class="primary-button" id="nextButton">NEXT ROUND <span>→</span></button><button type="button" class="text-button" id="resultNew">NEW MATCH</button></div></div></div>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
