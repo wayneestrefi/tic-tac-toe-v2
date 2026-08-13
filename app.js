@@ -103,7 +103,21 @@
     else { players[result.player].score++; el('resultTitle').textContent = players[result.player].name + ' WINS'; el('resultSub').textContent = 'Victory as ' + result.player; el('resultSymbol').textContent = result.player === 'X' ? '×' : '○'; }
     render();
     if (result.line) { el('board').classList.add('has-winner'); for (var i = 0; i < result.line.length; i++) el('board').children[result.line[i]].classList.add('winner'); }
-    window.setTimeout(function () { el('resultOverlay').classList.remove('hidden'); }, 300);
+    window.setTimeout(function () { el('resultOverlay').classList.remove('hidden'); if (!result.draw) celebrate(); }, 300);
+  }
+
+  function celebrate() {
+    var burst = el('pixelBurst');
+    burst.innerHTML = '';
+    var colors = ['#ffe45c', '#ff4fa3', '#35f5df', '#ffffff'];
+    for (var i = 0; i < 28; i++) {
+      var bit = document.createElement('i');
+      bit.style.setProperty('--x', (Math.random() * 100 - 50) + 'vw');
+      bit.style.setProperty('--y', (Math.random() * 80 - 40) + 'vh');
+      bit.style.setProperty('--delay', (Math.random() * .18) + 's');
+      bit.style.background = colors[i % colors.length];
+      burst.appendChild(bit);
+    }
   }
 
   function available() { var result = []; for (var i = 0; i < 9; i++) if (!cells[i]) result.push(i); return result; }
@@ -173,6 +187,11 @@
     el('swapButton').addEventListener('click', function () { var temp = players.X; players.X = players.O; players.O = temp; newRound(); });
     function goHome() { el('gameView').classList.add('hidden'); el('setupView').classList.remove('hidden'); el('resultOverlay').classList.add('hidden'); round = 1; draws = 0; }
     el('newButton').addEventListener('click', goHome); el('resultNew').addEventListener('click', goHome);
+    document.addEventListener('keydown', function (event) {
+      var key = event.key.toLowerCase();
+      if (key === 'r' && players && !el('gameView').classList.contains('hidden')) { el('resultOverlay').classList.add('hidden'); el('board').classList.remove('has-winner'); newRound(); return; }
+      if (players && !over && !el('gameView').classList.contains('hidden') && key >= '1' && key <= '9') play(Number(key) - 1, false);
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind); else bind();
