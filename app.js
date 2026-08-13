@@ -111,10 +111,49 @@
   function aiMove() {
     if (over) return;
     var open = available();
+    if (!open.length) return;
     var pick = open[Math.floor(Math.random() * open.length)];
-    for (var i = 0; i < open.length; i++) if (canWin(open[i], turn)) { pick = open[i]; break; }
-    if (difficulty !== 'easy') { var enemy = turn === 'X' ? 'O' : 'X'; for (var j = 0; j < open.length; j++) if (canWin(open[j], enemy)) { pick = open[j]; break; } }
+    if (difficulty === 'medium' || difficulty === 'hard') {
+      for (var i = 0; i < open.length; i++) if (canWin(open[i], turn)) { pick = open[i]; break; }
+      var enemy = turn === 'X' ? 'O' : 'X';
+      for (var j = 0; j < open.length; j++) if (canWin(open[j], enemy)) { pick = open[j]; break; }
+      if (difficulty === 'hard' && !canWin(pick, turn)) pick = strategicMove(turn);
+    }
+    if (difficulty === 'impossible') pick = minimax(cells.slice(), turn, 0).index;
     play(pick, true);
+  }
+
+  function strategicMove(mark) {
+    var open = available();
+    if (cells[4] === '') return 4;
+    var corners = [0, 2, 6, 8].filter(function (i) { return cells[i] === ''; });
+    if (corners.length) return corners[Math.floor(Math.random() * corners.length)];
+    return open[0];
+  }
+
+  function minimax(state, mark, depth) {
+    var result = evaluate(state);
+    if (result !== null) return {score: result === mark ? 10 - depth : result === 'draw' ? 0 : depth - 10, index: null};
+    var open = [];
+    for (var i = 0; i < 9; i++) if (!state[i]) open.push(i);
+    var best = {score: -Infinity, index: open[0]};
+    for (var j = 0; j < open.length; j++) {
+      state[open[j]] = mark;
+      var score = -minimax(state, mark === 'X' ? 'O' : 'X', depth + 1).score;
+      state[open[j]] = '';
+      if (score > best.score) best = {score: score, index: open[j]};
+    }
+    return best;
+  }
+
+  function evaluate(state) {
+    var lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      if (state[line[0]] && state[line[0]] === state[line[1]] && state[line[0]] === state[line[2]]) return state[line[0]];
+    }
+    for (var j = 0; j < 9; j++) if (!state[j]) return null;
+    return 'draw';
   }
 
   function bind() {
